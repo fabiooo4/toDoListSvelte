@@ -1,45 +1,55 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  import TaskBuild from './lib/TaskBuild.svelte'
+
+  let tasks = [{
+    name: "task1",
+  },
+  {
+      name: "task2",
+  }]
+
+  let filter=""
+  let taskName= ""
+  $: filteredTasks = tasks.filter(el => el.name.includes(filter))
+  $: deleteComponent = (index) => {
+    tasks.splice(index, 1)
+  }
+
+  const addNewComponent = () =>{
+    tasks.push({
+      name: taskName,
+    })
+    tasks = tasks
+  }
+
+  let index
+
+  const deleteTask = (index) => {
+    // tasks.splice(index, 1)
+    console.log(index)
+  }
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <h1 class="text-orange-600 uppercase text-7xl flex-nowrap font-thin leading-tight m-8 max-w-xs">To-do List</h1>
+
+  <div class="flex flex-col items-center">
+    
+    <h3 class="font-bold text-xl">Aggiungi una task</h3><br>
+    
+    <div class="grid-cols-2">
+      Task: <input class="rounded bg-zinc-600 w-60 overflow-auto" type="text" bind:value={taskName}/>
+    
+      <button class="rounded bg-orange-700 text-white w-20 h-8 m-2 hover:bg-orange-800" on:click={addNewComponent}>Add</button>  
+    </div>
+    
+  </div><br><br>
+  
+  Filtro: <input class="rounded bg-zinc-600" type="text" bind:value={filter}/>
+
+  <div id="taskList">
+    {#each filteredTasks as task, i}
+      <TaskBuild {task}/>
+    {/each}
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
-
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>
